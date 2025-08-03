@@ -6,12 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <style>
-    /* Base styles */
     body {
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #0a1a3b; /* dark blue */
+      background-color: #0a1a3b;
       color: white;
       display: flex;
       flex-direction: column;
@@ -74,6 +73,7 @@
       transform: scale(1);
       transform-origin: 0 0;
       transition: transform 0.3s ease-in-out;
+      margin-bottom: 15px;
     }
 
     @media (max-width: 400px) {
@@ -81,18 +81,52 @@
         transform: scale(0.9);
       }
     }
+
+    #error-message {
+      color: red;
+      margin-top: 10px;
+      text-align: center;
+      display: none;
+    }
   </style>
 </head>
 <body>
-
   <h2>Human Verification</h2>
-
-  <form action="/verify" method="POST">
-    <div class="g-recaptcha" data-sitekey="6LftXZkrAAAAACw60WC9t3nLxZlfp8ZrngCL6o-O"></div>
+  <form action="/verify" method="POST" onsubmit="validateForm(event)">
+    <label for="g-recaptcha">Please verify you are not a robot:</label>
+    <div class="g-recaptcha" id="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+    <div id="error-message"></div>
     <button type="submit">Submit</button>
   </form>
-  
-<script src="./server.js"></script>
+
+  <script>
+    async function validateForm(event) {
+      event.preventDefault();
+      const recaptchaResponse = grecaptcha.getResponse();
+      const errorDiv = document.getElementById('error-message');
+      if (!recaptchaResponse) {
+        errorDiv.textContent = 'Please complete the reCAPTCHA.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+      errorDiv.style.display = 'none';
+      try {
+        const response = await fetch('/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `g-recaptcha-response=${encodeURIComponent(recaptchaResponse)}`
+        });
+        if (response.ok) {
+          alert('Verification successful!');
+        } else {
+          errorDiv.textContent = 'Verification failed. Please try again.';
+          errorDiv.style.display = 'block';
+        }
+      } catch (error) {
+        errorDiv.textContent = 'An error occurred. Please try again later.';
+        errorDiv.style.display = 'block';
+      }
+    }
+  </script>
 </body>
 </html>
-
