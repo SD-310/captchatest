@@ -7,12 +7,10 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Serve static files (e.g., your HTML file)
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname)); // Serve static files from root
 
-// Serve the HTML file
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html')); // Serve index.html from root
 });
 
 
@@ -72,3 +70,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
