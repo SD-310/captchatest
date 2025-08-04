@@ -15,9 +15,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// reCAPTCHA secret key (store in environment variables for production)
-const RECAPTCHA_SECRET_KEY = 'const RECAPTCHA_SECRET_KEY = '6LftXZkrAAAAAMjDWICMcLobabmo7dR2774H64Xu';
-'; // Replace with your secret key
+
+const RECAPTCHA_SECRET_KEY = '6LftXZkrAAAAAMjDWICMcLobabmo7dR2774H64Xu';
 
 // Handle reCAPTCHA verification
 app.post('/verify', async (req, res) => {
@@ -32,13 +31,13 @@ app.post('/verify', async (req, res) => {
   }
 
   try {
-    // Make POST request to Google's reCAPTCHA verification API
+    // Make POST request for reCAPTCHA verification
     const verificationURL = 'https://www.google.com/recaptcha/api/siteverify';
     const verificationResponse = await axios.post(verificationURL, null, {
       params: {
         secret: RECAPTCHA_SECRET_KEY,
         response: recaptchaResponse,
-        remoteip: req.ip // Optional: include user's IP for better verification
+        
       }
     });
 
@@ -73,4 +72,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
