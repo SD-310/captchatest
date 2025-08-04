@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 });
 
 
-const RECAPTCHA_SECRET_KEY = '6LftXZkrAAAAAMjDWICMcLobabmo7dR2774H64Xu';
+const RECAPTCHA_SECRET_KEY = '6Ld9f5orAAAAALL93PkwsPrI5IusE_XS72rxh9QX';
 
 // Handle reCAPTCHA verification
 app.post('/verify', async (req, res) => {
@@ -70,4 +70,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
 
